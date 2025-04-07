@@ -8,9 +8,17 @@ function reload() {
 }
 
 async function fetchNews(query) {
-    const res = await fetch(`${url}${query}&apiKey=${API_KEY}`);
-    const data = await res.json();
-    bindData(data.articles);
+    const fullUrl = `${url}${query}&apiKey=${API_KEY}`;
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(fullUrl)}`;
+
+    try {
+        const res = await fetch(proxyUrl);
+        const result = await res.json();
+        const data = JSON.parse(result.contents);
+        bindData(data.articles);
+    } catch (error) {
+        console.error("Error fetching news:", error);
+    }
 }
 
 function bindData(articles) {
