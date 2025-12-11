@@ -165,3 +165,30 @@ main{
 .news-source {
     margin-block: 12px ;
 }
+
+.load-more-container {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.load-more-btn {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0px 3px 8px rgba(0,0,0,0.15);
+}
+
+.load-more-btn:hover {
+    background-color: var(--accent-color-dark);
+    transform: translateY(-3px);
+}
+
+.load-more-btn:active {
+    transform: scale(0.96);
+}
+
