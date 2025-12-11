@@ -1,4 +1,4 @@
-# 📰 News Aggregator – Modern News Web App
+# 📰 News Flash– Modern News Web App
 
 👉 **Live Demo:**  
 🔗 https://YOUR-LIVE-LINK-HERE
