@@ -3,7 +3,7 @@ const BASE_URL = "https://gnews.io/api/v4";
 
 let currentQuery = "india";     
 let currentPage = 1;            
-let pageSize = 10;            
+let pageSize = 6;            
 
 window.addEventListener("load", () => fetchNews("india", true));
 function reload() {
