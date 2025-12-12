@@ -1,7 +1,7 @@
 # 📰 News Flash– Modern News Web App
 
 👉 **Live Demo:**  
-🔗 https://YOUR-LIVE-LINK-HERE
+🔗 https://adityabs-eng.github.io/News-Flash/
 
 ---
 
