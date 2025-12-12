@@ -1,34 +1,36 @@
-const API_KEY = "3653cc76997379598e7f2349f2d2c59f"; 
-const BASE_URL = "https://gnews.io/api/v4";
-const PROXY_API = "https://newsflash-proxy.vercel.app/api/gnews";
+const API_KEY = "a2e93530a59d47f9831d29c9f77edc58";
+const BASE_URL = "https://newsapi.org/v2/everything?q=";
 
+let currentQuery = "India";   // default load
+let currentPage = 1;
+let pageSize = 6;             // 6 posts per load
 
-let currentQuery = "india";     
-let currentPage = 1;            
-let pageSize = 10;             
+window.addEventListener("load", () => fetchNews(currentQuery, true));
 
-window.addEventListener("load", () => fetchNews("india", true));
 function reload() {
     window.location.reload();
 }
 
 async function fetchNews(query, reset = false) {
+    if (reset) {
+        currentPage = 1;
+        document.getElementById("cards-container").innerHTML = "";
+    }
+
+    currentQuery = query;
+
+    const apiURL = `${BASE_URL}${query}&page=${currentPage}&pageSize=${pageSize}&apiKey=${API_KEY}`;
+
     try {
-        if (reset) {
-            document.getElementById("cards-container").innerHTML = "";
-            currentPage = 1;
+        const res = await fetch(apiURL);
+        const data = await res.json();
+
+        if (data.articles) {
+            bindData(data.articles);
         }
 
-        currentQuery = query;
+        currentPage++; // Next page for Load More
 
-        const res = await fetch(
-            `${BASE_URL}/search?q=${query}&lang=en&country=in&max=${pageSize}&page=${currentPage}&apikey=${API_KEY}`
-        );
-
-        const data = await res.json();
-        bindData(data.articles || []);
-
-        currentPage++; // Next page on next click
     } catch (error) {
         console.error("Error fetching news:", error);
     }
@@ -36,12 +38,11 @@ async function fetchNews(query, reset = false) {
 
 function bindData(articles) {
     const cardsContainer = document.getElementById("cards-container");
-    const template = document.getElementById("template-news-card");
+    const newsCardTemplate = document.getElementById("template-news-card");
 
     articles.forEach((article) => {
-        if (!article.image) return;
-
-        const cardClone = template.content.cloneNode(true);
+        if (!article.urlToImage) return;
+        const cardClone = newsCardTemplate.content.cloneNode(true);
         fillDataInCard(cardClone, article);
         cardsContainer.appendChild(cardClone);
     });
@@ -53,14 +54,16 @@ function fillDataInCard(cardClone, article) {
     const newsSource = cardClone.querySelector("#news-source");
     const newsDesc = cardClone.querySelector("#news-desc");
 
-    newsImg.src = article.image;
+    newsImg.src = article.urlToImage;
     newsTitle.innerHTML = article.title;
-    newsDesc.innerHTML = article.description;
+    newsDesc.innerHTML = article.description || "No description available.";
+
     const date = new Date(article.publishedAt).toLocaleString("en-IN", {
         timeZone: "Asia/Kolkata",
     });
 
     newsSource.innerHTML = `${article.source.name} • ${date}`;
+
     cardClone.firstElementChild.addEventListener("click", () => {
         window.open(article.url, "_blank");
     });
@@ -70,19 +73,25 @@ let curSelectedNav = null;
 function onNavItemClick(id) {
     fetchNews(id, true);
     const navItem = document.getElementById(id);
+
     curSelectedNav?.classList.remove("active");
     curSelectedNav = navItem;
     curSelectedNav.classList.add("active");
 }
 
-document.getElementById("search-button").addEventListener("click", () => {
-    const query = document.getElementById("search-text").value.trim();
+const searchButton = document.getElementById("search-button");
+const searchText = document.getElementById("search-text");
+
+searchButton.addEventListener("click", () => {
+    const query = searchText.value.trim();
     if (!query) return;
     fetchNews(query, true);
+
     curSelectedNav?.classList.remove("active");
     curSelectedNav = null;
 });
 
+// ⭐ LOAD MORE BUTTON
 document.getElementById("load-more").addEventListener("click", () => {
     fetchNews(currentQuery, false);
 });
