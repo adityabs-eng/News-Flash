@@ -1,6 +1,6 @@
 const API_KEY = "3653cc76997379598e7f2349f2d2c59f";
 const BASE_URL = "https://gnews.io/api/v4";
-const PROXY = "https://api.allorigins.win/get?url=";
+const PROXY = "https://corsproxy.io/?"
 
 let currentQuery = "india";     
 let currentPage = 1;            
