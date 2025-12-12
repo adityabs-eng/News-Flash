@@ -1,10 +1,11 @@
-const API_KEY = "3653cc76997379598e7f2349f2d2c59f";
+const API_KEY = "3653cc76997379598e7f2349f2d2c59f"; 
 const BASE_URL = "https://gnews.io/api/v4";
-const PROXY = "https://api.allorigins.win/get?url=";
+const PROXY_API = "https://newsflash-proxy.vercel.app/api/gnews";
+
 
 let currentQuery = "india";     
 let currentPage = 1;            
-let pageSize = 10;            
+let pageSize = 10;             
 
 window.addEventListener("load", () => fetchNews("india", true));
 function reload() {
@@ -20,16 +21,16 @@ async function fetchNews(query, reset = false) {
 
         currentQuery = query;
 
-        const gnewsURL = `${BASE_URL}/search?q=${query}&lang=en&country=in&max=${pageSize}&page=${currentPage}&apikey=${API_KEY}`;
-        const finalURL = PROXY + encodeURIComponent(gnewsURL);
-        const res = await fetch(finalURL);
-        const wrapped = await res.json();
-        const data = JSON.parse(wrapped.contents);
+        const res = await fetch(
+            `${BASE_URL}/search?q=${query}&lang=en&country=in&max=${pageSize}&page=${currentPage}&apikey=${API_KEY}`
+        );
 
+        const data = await res.json();
         bindData(data.articles || []);
-        currentPage++;
+
+        currentPage++; // Next page on next click
     } catch (error) {
-        console.error("Proxy fetch error:", error);
+        console.error("Error fetching news:", error);
     }
 }
 
