@@ -1,76 +1,71 @@
 # 📰 News Flash – Modern News Web App
 
 👉 **Live Demo (GitHub Pages):**
-🔗 [https://adityabs-eng.github.io/News-Flash/]
+🔗 [https://adityabs-eng.github.io/News-Flash/](https://adityabs-eng.github.io/News-Flash/)
 
 ---
 
-## ⚠️ Important Notice (Why This App Doesn’t Work on GitHub Pages)
+## 📌 Overview
 
-This project **works perfectly on local machines** but may **NOT work when hosted on GitHub Pages**.
-
-### ❌ Reason: CORS Policy Restriction
-
-* The app fetches news directly from the **GNews API** using JavaScript (`fetch()` from the browser).
-* **GitHub Pages is a static hosting platform**.
-* The **GNews API blocks browser requests coming from GitHub Pages domains** due to **CORS (Cross-Origin Resource Sharing) security policies**.
-
-🔒 Because of this, **GitHub’s server cannot call the API**, and the browser blocks the request.
-
-✅ This is **NOT a bug in the code**.
-❌ This is a **server-side restriction imposed by the API provider**.
+**News Flash** is a modern, responsive news web application that fetches real-time news articles using the **NewsData.io API**. The application is built with pure **HTML, CSS, and JavaScript** and is hosted on **GitHub Pages**.
 
 ---
 
-## ✅ Why It Works Locally
+## 🔄 API Update (Important)
 
-When you run the project locally:
+### ❌ Removed API
 
-* The browser treats it as a **local origin**
-* API requests are allowed
-* No CORS block occurs
+* **GNews API** has been completely removed from this project.
+* Reason: GNews does **not support direct frontend requests** on static hosting platforms like GitHub Pages due to strict **CORS restrictions**.
 
-Hence, the application works correctly on your system.
+### ✅ Current API Used
+
+* **NewsData.io API**
+* Reason:
+
+  * Allows **direct browser-based requests**
+  * Works seamlessly on **GitHub Pages**
+  * Suitable for frontend-only projects
 
 ---
 
-## 🛠️ How to Run This Project Locally (Recommended)
+## ⚠️ Concern: CORS (Cross-Origin Resource Sharing)
 
-Follow these steps to run the project successfully:
+### ❓ What was the problem?
 
-### 1️⃣ Clone the Repository
+* While using **GNews API**, the application failed on GitHub Pages.
+* The browser blocked API calls due to **CORS policy restrictions**.
 
-```bash
-git clone https://github.com/adityabs-eng/News-Flash.git
-```
+### 🧠 Why this happens
 
-### 2️⃣ Navigate to the Project Folder
+* GitHub Pages is a **static hosting service**.
+* Some APIs (like GNews) block requests coming directly from browsers for security reasons.
 
-```bash
-cd News-Flash
-```
+---
 
-### 3️⃣ Open Using a Local Server (Important)
+## 🛠️ How This Issue Was Overcome
 
-⚠️ Do **NOT** open `index.html` directly by double-clicking.
+### ✅ Solution Implemented
 
-Use **any local server**:
+* Switched from **GNews API** to **NewsData.io API**.
+* NewsData.io supports **client-side fetching** without triggering CORS errors.
 
-####  VS Code Live Server (Easiest)
+### 🧩 Alternative Solutions Considered
 
-1. Open the folder in **VS Code**
-2. Install **Live Server** extension
-3. Right-click `index.html`
-4. Click **Open with Live Server**
+* Backend proxy using **Node.js + Vercel**
+* Serverless functions to hide API keys
 
+> For simplicity and frontend-only deployment, **NewsData.io** was chosen.
+
+---
 
 ## 🚀 Features
 
 * 🔎 Search news by keyword
-* 🇮🇳 Indian & 🌍 International news
-* 🗂 Category filters (Finance, Politics, Tech, Entertainment)
+* 🇮🇳 Indian & 🌍 International news coverage
+* 🗂 Category-based filtering
 * 🔄 Load More pagination
-* 📱 Responsive UI
+* 📱 Fully responsive UI
 
 ---
 
@@ -79,7 +74,7 @@ Use **any local server**:
 * **HTML5**
 * **CSS3**
 * **JavaScript (ES6)**
-* **GNews API**
+* **NewsData.io API**
 
 ---
 
@@ -97,31 +92,30 @@ Use **any local server**:
 
 ## 🔐 API Key Notice
 
-* The API key is currently placed in `script.js` for demo purposes.
-* For production:
+* The API key is currently stored in `script.js` for demo purposes.
+* For production-level applications:
 
-  * Use a backend proxy (Node.js / Vercel)
-  * Or store keys in environment variables
+  * Use a **backend proxy** (Vercel / Node.js)
+  * Store keys in **environment variables**
 
 ---
 
-## 📌 Future Improvements
+## 📌 Future Enhancements
 
-* Backend proxy to avoid CORS issues
+* Backend proxy for enhanced security
 * Server-side caching
-* Authentication-based API access
-* Deployment using Vercel / Netlify with serverless functions
+* Improved pagination & filters
+* Deployment with serverless backend
 
 ---
 
 ## 🙌 Conclusion
 
-If the app does not load news on GitHub Pages:
-✔ Your code is correct
-✔ The UI is working
-❌ The API blocks GitHub Pages due to CORS
+* ✅ Application works perfectly on **GitHub Pages**
+* ✅ CORS issue resolved using **NewsData.io**
+* ✅ Fully frontend-based solution
 
-👉 **Clone and run locally to see the full working application.**
+If you clone and run this project, you will see a fully working news application without backend dependencies.
 
 ---
 
