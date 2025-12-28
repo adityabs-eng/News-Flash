@@ -1,32 +1,33 @@
-const API_KEY = "3653cc76997379598e7f2349f2d2c59f"; 
-const BASE_URL = "https://gnews.io/api/v4";
+const API_KEY = "pub_ff087493c5bf43dd8c95185d3ff7d580";
+const BASE_URL = "https://newsdata.io/api/1/news";
 
-let currentQuery = "india";     
-let currentPage = 1;            
-let pageSize = 6;            
+let currentQuery = "india";
+let currentPage = null; // NewsData uses nextPage
+let pageSize = 6;
 
 window.addEventListener("load", () => fetchNews("india", true));
-function reload() {
-    window.location.reload();
-}
 
 async function fetchNews(query, reset = false) {
     try {
         if (reset) {
             document.getElementById("cards-container").innerHTML = "";
-            currentPage = 1;
+            currentPage = null;
         }
 
         currentQuery = query;
 
-        const res = await fetch(
-            `${BASE_URL}/search?q=${query}&lang=en&country=in&max=${pageSize}&page=${currentPage}&apikey=${API_KEY}`
-        );
+        let url = `${BASE_URL}?apikey=${API_KEY}&q=${query}&language=en&country=in`;
 
+        if (currentPage) {
+            url += `&page=${currentPage}`;
+        }
+
+        const res = await fetch(url);
         const data = await res.json();
-        bindData(data.articles || []);
 
-        currentPage++; // Next page on next click
+        bindData(data.results || []);
+
+        currentPage = data.nextPage; // pagination token
     } catch (error) {
         console.error("Error fetching news:", error);
     }
@@ -36,8 +37,8 @@ function bindData(articles) {
     const cardsContainer = document.getElementById("cards-container");
     const template = document.getElementById("template-news-card");
 
-    articles.forEach((article) => {
-        if (!article.image) return;
+    articles.slice(0, pageSize).forEach((article) => {
+        if (!article.image_url) return;
 
         const cardClone = template.content.cloneNode(true);
         fillDataInCard(cardClone, article);
@@ -46,21 +47,19 @@ function bindData(articles) {
 }
 
 function fillDataInCard(cardClone, article) {
-    const newsImg = cardClone.querySelector("#news-img");
-    const newsTitle = cardClone.querySelector("#news-title");
-    const newsSource = cardClone.querySelector("#news-source");
-    const newsDesc = cardClone.querySelector("#news-desc");
+    cardClone.querySelector("#news-img").src = article.image_url;
+    cardClone.querySelector("#news-title").innerHTML = article.title;
+    cardClone.querySelector("#news-desc").innerHTML = article.description || "";
 
-    newsImg.src = article.image;
-    newsTitle.innerHTML = article.title;
-    newsDesc.innerHTML = article.description;
-    const date = new Date(article.publishedAt).toLocaleString("en-IN", {
+    const date = new Date(article.pubDate).toLocaleString("en-IN", {
         timeZone: "Asia/Kolkata",
     });
 
-    newsSource.innerHTML = `${article.source.name} • ${date}`;
+    cardClone.querySelector("#news-source").innerHTML =
+        `${article.source_id} • ${date}`;
+
     cardClone.firstElementChild.addEventListener("click", () => {
-        window.open(article.url, "_blank");
+        window.open(article.link, "_blank");
     });
 }
 
@@ -82,5 +81,7 @@ document.getElementById("search-button").addEventListener("click", () => {
 });
 
 document.getElementById("load-more").addEventListener("click", () => {
-    fetchNews(currentQuery, false);
+    if (currentPage) {
+        fetchNews(currentQuery, false);
+    }
 });
